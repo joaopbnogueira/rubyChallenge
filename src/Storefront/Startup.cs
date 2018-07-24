@@ -1,31 +1,124 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Robotify.AspNetCore;
+using Storefront.Configuration;
 
-namespace Cabify.Storefront
+namespace Storefront
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
+            Environment = env;
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IHostingEnvironment Environment { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+        {           
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
+            services.AddAuthentication(options =>
             {
-                configuration.RootPath = "ClientApp/build";
-            });
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+                .AddCookie(options =>
+                {
+                    options.LoginPath = new PathString("/signin");
+                })
+                .AddOpenIdConnect(options =>
+                {
+                    var openIdConfig = Configuration.GetSection(nameof(OpenIdConfiguration)).Get<OpenIdConfiguration>();
+
+                    options.ClientId = openIdConfig.ClientId;
+                    options.ClientSecret = openIdConfig.ClientSecret;
+                    options.Authority = openIdConfig.Authority;
+                    
+                    options.RequireHttpsMetadata = !Environment.IsDevelopment();
+                    options.GetClaimsFromUserInfoEndpoint = true;
+                    options.SaveTokens = true;
+
+                    // Use the authorization code flow.
+                    options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
+                    options.AuthenticationMethod = OpenIdConnectRedirectBehavior.RedirectGet;
+                    options.ClaimActions.MapAllExcept("aud", "iss", "iat", "nbf", "exp", "aio", "c_hash", "uti", "nonce");
+
+                    options.Events = new OpenIdConnectEvents
+                    {
+                        OnAuthenticationFailed = c =>
+                        {
+                            c.HandleResponse();
+
+                            c.Response.StatusCode = 500;
+                            c.Response.ContentType = "text/plain";
+                            if (Environment.IsDevelopment())
+                            {
+                                // Debug only, in production do not share exceptions with the remote host.
+                                return c.Response.WriteAsync(c.Exception.ToString());
+                            }
+                            return c.Response.WriteAsync("An error occurred processing your authentication.");
+                        },
+
+                        OnTicketReceived = context =>
+                        {
+                            context.Properties.AllowRefresh = true;
+                            return Task.CompletedTask;
+                        },
+
+                        OnRedirectToIdentityProviderForSignOut = context =>
+                        {
+                            var logoutUri = openIdConfig.LogoutUri;
+                            var postLogoutUri = context.Properties.RedirectUri;
+                            if (!string.IsNullOrEmpty(postLogoutUri))
+                            {
+                                if (postLogoutUri.StartsWith("/"))
+                                {
+                                    // transform to absolute
+                                    var request = context.Request;
+                                    postLogoutUri = request.Scheme + "://" + request.Host + request.PathBase + postLogoutUri;
+                                }
+                                logoutUri = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString(openIdConfig.LogoutUri, "returnTo", postLogoutUri);
+                            }
+
+                            context.Response.Redirect(logoutUri);
+                            context.HandleResponse();
+
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
+
+            services.AddRobotify();
+
+            services.AddMvc(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,30 +130,22 @@ namespace Cabify.Storefront
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseSpaStaticFiles();
 
+            app.UseStaticFiles();            
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
-            });
+            app.UseRobotify();
         }
     }
 }
