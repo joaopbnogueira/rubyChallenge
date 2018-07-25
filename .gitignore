@@ -20,6 +20,7 @@ bin/
 Bin/
 obj/
 Obj/
+publish/
 
 # Visual Studio cache
 .vs/
