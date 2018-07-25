@@ -1,6 +1,6 @@
 # Cabify Mobile Challenge
 
-[ [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/joaopbnogueira/rubyChallenge/master/LICENSE) | [![Windows build status][ https://ci.appveyor.com/api/projects/status/ygdanso1ygjl0bn9/branch/master?svg=true]][https://github.com/joaopbnogueira/rubyChallenge/tree/master] |
+![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg) ![Windows build status](https://ci.appveyor.com/api/projects/status/ygdanso1ygjl0bn9/branch/master?svg=true)
 
 ##### Besides providing exceptional transportation services, Cabify also runs a physical store which sells (only) 3 products:
 
