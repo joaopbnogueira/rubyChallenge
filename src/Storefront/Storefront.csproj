@@ -19,4 +19,8 @@
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataRepository\DataRepository.csproj" />
+  </ItemGroup>
+
 </Project>

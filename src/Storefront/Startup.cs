@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
+using Cabify.DataRepository;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -10,14 +8,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Robotify.AspNetCore;
 using Storefront.Configuration;
+using Storefront.Services;
 
 namespace Storefront
 {
@@ -63,6 +62,10 @@ namespace Storefront
                     options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
                     options.AuthenticationMethod = OpenIdConnectRedirectBehavior.RedirectGet;
                     options.ClaimActions.MapAllExcept("aud", "iss", "iat", "nbf", "exp", "aio", "c_hash", "uti", "nonce");
+                    options.Scope.Clear();
+                    options.Scope.Add("openid");
+                    options.Scope.Add("email");
+                    options.Scope.Add("profile");
 
                     options.Events = new OpenIdConnectEvents
                     {
@@ -119,6 +122,10 @@ namespace Storefront
                 options.Filters.Add(new AuthorizeFilter(policy));
 
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.UseDataRepository();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IUserContext, UserContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

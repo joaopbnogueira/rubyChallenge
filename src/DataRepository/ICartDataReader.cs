@@ -1,6 +1,6 @@
 ﻿namespace Cabify.DataRepository
 {
-    public interface IProductsDataReader
+    public interface ICartDataReader
     {
         void GetProductById();
     }

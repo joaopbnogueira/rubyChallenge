@@ -1,16 +1,24 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Storefront.Models;
+using Storefront.Services;
 
 namespace Storefront.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IUserContext _context;
+
+        public HomeController(IUserContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
             var viewModel = new HomeIndexViewModel
             {
-                Name = HttpContext.User.FindFirst("name")?.Value                
+                Name = _context.Name
             };
 
             return View(viewModel);
