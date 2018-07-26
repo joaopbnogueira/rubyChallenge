@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cabify.DataRepository
 {
-    internal class StorefrontContext: DbContext
+    public class StorefrontContext: DbContext
     {
         public StorefrontContext(DbContextOptions<StorefrontContext> options) : base(options)
         {

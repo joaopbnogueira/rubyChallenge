@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Serilog;
+using Serilog.Exceptions;
 
 namespace Cabify.Storefront
 {
@@ -12,6 +14,13 @@ namespace Cabify.Storefront
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration.ReadFrom
+                    .Configuration(hostingContext.Configuration)
+                    .Enrich.FromLogContext()
+                    .Enrich.WithThreadId()
+                    .Enrich.WithProcessId()
+                    .Enrich.WithExceptionDetails()
+                    .Enrich.WithEnvironmentUserName());
     }
 }

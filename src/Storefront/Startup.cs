@@ -1,8 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
+using AutoMapper;
 using Cabify.DataRepository;
 using Cabify.Storefront.Configuration;
 using Cabify.Storefront.Services;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -33,9 +35,18 @@ namespace Cabify.Storefront
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {           
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+        {
+            services.AddRobotify();
+            services.AddMiniProfiler().AddEntityFramework();
+            services.AddAutoMapper(typeof(Startup));
 
+            services.UseDataRepository(Configuration.GetConnectionString("DefaultConnection"));
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IUserContext, UserContext>();
+            
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -110,22 +121,21 @@ namespace Cabify.Storefront
                             return Task.CompletedTask;
                         }
                     };
-                });
-
-            services.AddRobotify();
+                });            
 
             services.AddMvc(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
                     .Build();
+
                 options.Filters.Add(new AuthorizeFilter(policy));
+                //options.Filters.Add(typeof(DbContextTransactionPageFilter));
+                //options.Filters.Add(typeof(ValidatorPageFilter));
+                //options.ModelBinderProviders.Insert(0, new EntityModelBinderProvider());
 
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            services.UseDataRepository();
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IUserContext, UserContext>();
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+            .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Startup>(); });            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
