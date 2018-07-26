@@ -1,6 +1,4 @@
-using System;
-
-namespace Storefront.Models
+namespace Cabify.Storefront.Models
 {
     public class ErrorViewModel
     {

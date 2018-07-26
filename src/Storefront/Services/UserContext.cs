@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Storefront.Services
+namespace Cabify.Storefront.Services
 {
     public class UserContext : IUserContext
     {

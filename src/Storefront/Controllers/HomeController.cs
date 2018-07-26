@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
+using Cabify.Storefront.Models;
+using Cabify.Storefront.Services;
 using Microsoft.AspNetCore.Mvc;
-using Storefront.Models;
-using Storefront.Services;
 
-namespace Storefront.Controllers
+namespace Cabify.Storefront.Controllers
 {
     public class HomeController : Controller
     {

@@ -1,4 +1,4 @@
-﻿namespace Storefront.Services
+﻿namespace Cabify.Storefront.Services
 {
     public interface IUserContext
     {

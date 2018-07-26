@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Storefront.Controllers
+namespace Cabify.Storefront.Controllers
 {
     public class AuthenticationController : Controller
     {
