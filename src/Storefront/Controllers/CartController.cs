@@ -1,5 +1,8 @@
-﻿using Cabify.DataRepository;
+﻿using System;
+using System.Threading.Tasks;
+using Cabify.DataRepository;
 using Cabify.Storefront.Models;
+using Cabify.Storefront.Models.Requests;
 using Cabify.Storefront.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,33 +13,35 @@ namespace Cabify.Storefront.Controllers
     public class CartController : Controller
     {
         private readonly IUserContext _userContext;
-        private readonly ICartDataReader _cartDataReader;
+        private readonly IDataReader _dataReader;
+        private readonly IDataWriter _dataWriter;
 
-        public CartController(IUserContext userContext, ICartDataReader cartDataReader)
+        public CartController(IUserContext userContext, IDataReader dataReader, IDataWriter dataWriter)
         {
             _userContext = userContext;
-            _cartDataReader = cartDataReader;
+            _dataReader = dataReader;
+            _dataWriter = dataWriter;
         }
 
         [Route("")]
         [HttpGet]
-        public ActionResult<CartViewModel> Get()
+        public async Task<ActionResult<CartViewModel>> Get()
         {
-            return new CartViewModel();
+            var userId = await _userContext.GetUserId();
+            var cartId = await _dataReader.GetUserCartId(userId);
+            if (cartId == Guid.Empty)
+            {
+                cartId = await _dataWriter.AddCart(userId);
+            }
+            var products = await _dataReader.GetCartProducts(userId, cartId);
+            return new CartViewModel(cartId, products);            
         }
 
-        [Route("item")]
+        [Route("{cartId}")]
         [HttpPut]
-        public IActionResult PutItem([FromBody] int id)
+        public IActionResult PutProduct(Guid cartId, [FromBody] PutProductInCart request)
         {
             return Ok();
-        }
-
-        [Route("voucher")]
-        [HttpPut]
-        public IActionResult PutVoucher([FromBody] string code)
-        {
-            return Ok();
-        }
+        }      
     }
 }

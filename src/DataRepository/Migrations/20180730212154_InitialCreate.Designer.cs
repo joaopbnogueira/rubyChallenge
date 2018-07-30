@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cabify.DataRepository.Migrations
 {
     [DbContext(typeof(StorefrontContext))]
-    [Migration("20180730001000_InitialCreate")]
+    [Migration("20180730212154_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,10 @@ namespace Cabify.DataRepository.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.Property<Guid>("UserId");
 
@@ -42,6 +46,10 @@ namespace Cabify.DataRepository.Migrations
 
                     b.Property<Guid>("ProductId");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
                     b.HasKey("CartId", "ProductId");
 
                     b.HasIndex("ProductId");
@@ -56,6 +64,10 @@ namespace Cabify.DataRepository.Migrations
 
                     b.Property<decimal>("Price");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
                     b.HasKey("Id");
 
                     b.ToTable("Products");
@@ -68,6 +80,10 @@ namespace Cabify.DataRepository.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired();
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 

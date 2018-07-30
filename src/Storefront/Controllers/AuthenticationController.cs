@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +10,7 @@ namespace Cabify.Storefront.Controllers
     {
         [AllowAnonymous]
         [HttpGet("~/signin")]
-        public async Task<IActionResult> SignIn()
+        public IActionResult SignIn()
         {            
             return Challenge(new OpenIdConnectChallengeProperties { RedirectUri = "/" }, OpenIdConnectDefaults.AuthenticationScheme);
         }

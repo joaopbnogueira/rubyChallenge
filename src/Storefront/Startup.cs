@@ -151,6 +151,8 @@ namespace Cabify.Storefront
                 app.UseHsts();
             }
 
+            app.ApplicationServices.InitializeDataRepository();
+
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();            

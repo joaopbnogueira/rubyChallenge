@@ -1,9 +1,17 @@
-﻿namespace Cabify.Storefront.Models
+﻿using System;
+using Cabify.DataRepository.Model;
+
+namespace Cabify.Storefront.Models
 {
     public class CartViewModel
     {
+        public Guid CartId { get; set; }
         public CartItemViewModel[] Items { get; set; }
-        public double Amount { get; set; }
-        public string Currency { get; set; }
+        public string Total { get; set; }
+        
+        public CartViewModel(Guid cartId, Product[] product)
+        {
+            
+        }
     }
 }

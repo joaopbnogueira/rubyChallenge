@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cabify.DataRepository.Model
 {
@@ -9,5 +10,8 @@ namespace Cabify.DataRepository.Model
 
         public Guid ProductId { get; set; }
         public Product Product { get; set; }
+
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
     }
 }

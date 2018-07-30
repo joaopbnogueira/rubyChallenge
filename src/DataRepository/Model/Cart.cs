@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cabify.DataRepository.Model
@@ -13,6 +14,9 @@ namespace Cabify.DataRepository.Model
 
         public User User { get; set; }
 
-        public ICollection<CartProduct> CartProducts { get; set; }     
+        public ICollection<CartProduct> CartProducts { get; set; }
+
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
     }
 }

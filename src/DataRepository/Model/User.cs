@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cabify.DataRepository.Model
@@ -11,5 +12,8 @@ namespace Cabify.DataRepository.Model
         public string Email { get; set; }
         
         public Cart Cart { get; set; }
+
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
     }
 }
