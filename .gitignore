@@ -21,6 +21,7 @@ Bin/
 obj/
 Obj/
 publish/
+logs/
 
 # Visual Studio cache
 .vs/
