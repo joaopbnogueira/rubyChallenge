@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Cabify.DataRepository.Model
+namespace Cabify.DataRepository.Entities
 {
     public class User
     {        

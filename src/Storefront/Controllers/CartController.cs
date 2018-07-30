@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cabify.DataRepository;
+using Cabify.Storefront.Mappers;
 using Cabify.Storefront.Models;
 using Cabify.Storefront.Models.Requests;
 using Cabify.Storefront.Services;
@@ -15,12 +16,14 @@ namespace Cabify.Storefront.Controllers
         private readonly IUserContext _userContext;
         private readonly IDataReader _dataReader;
         private readonly IDataWriter _dataWriter;
+        private readonly CartMapper _mapper;
 
-        public CartController(IUserContext userContext, IDataReader dataReader, IDataWriter dataWriter)
+        public CartController(IUserContext userContext, IDataReader dataReader, IDataWriter dataWriter, CartMapper mapper)
         {
             _userContext = userContext;
             _dataReader = dataReader;
             _dataWriter = dataWriter;
+            _mapper = mapper;
         }
 
         [Route("")]
@@ -28,13 +31,16 @@ namespace Cabify.Storefront.Controllers
         public async Task<ActionResult<CartViewModel>> Get()
         {
             var userId = await _userContext.GetUserId();
+
             var cartId = await _dataReader.GetUserCartId(userId);
             if (cartId == Guid.Empty)
             {
                 cartId = await _dataWriter.AddCart(userId);
             }
+
             var products = await _dataReader.GetCartProducts(userId, cartId);
-            return new CartViewModel(cartId, products);            
+
+            return _mapper.Map(cartId, products);
         }
 
         [Route("{cartId}")]

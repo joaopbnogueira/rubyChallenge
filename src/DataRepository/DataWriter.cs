@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Cabify.DataRepository.Model;
-using Microsoft.EntityFrameworkCore;
+using Cabify.DataRepository.Entities;
 
 namespace Cabify.DataRepository
 {

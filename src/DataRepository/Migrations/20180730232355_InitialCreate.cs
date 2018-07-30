@@ -11,7 +11,8 @@ namespace Cabify.DataRepository.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Price = table.Column<decimal>(nullable: false),
                     RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
@@ -57,7 +58,7 @@ namespace Cabify.DataRepository.Migrations
                 columns: table => new
                 {
                     CartId = table.Column<Guid>(nullable: false),
-                    ProductId = table.Column<Guid>(nullable: false),
+                    ProductId = table.Column<string>(nullable: false),
                     RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
                 constraints: table =>

@@ -1,17 +1,13 @@
 ﻿using System;
-using Cabify.DataRepository.Model;
+using System.Collections.Generic;
+using Cabify.Storefront.Models.Responses;
 
 namespace Cabify.Storefront.Models
 {
     public class CartViewModel
     {
         public Guid CartId { get; set; }
-        public CartItemViewModel[] Items { get; set; }
-        public string Total { get; set; }
-        
-        public CartViewModel(Guid cartId, Product[] product)
-        {
-            
-        }
+        public IReadOnlyCollection<CartItemViewModel> Items { get; set; }
+        public string Total { get; set; }           
     }
 }

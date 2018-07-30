@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Cabify.DataRepository.Model;
+using AutoMapper;
+using Cabify.DataRepository.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cabify.DataRepository
@@ -9,10 +10,12 @@ namespace Cabify.DataRepository
     internal class DataReader : IDataReader
     {
         private readonly StorefrontContext _context;
+        private readonly IMapper _mapper;
 
-        public DataReader(StorefrontContext context)
+        public DataReader(StorefrontContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
        
         public async Task<Guid> GetUserId(string email)
@@ -25,10 +28,10 @@ namespace Cabify.DataRepository
             return await _context.Carts.AsNoTracking().Where(c => c.UserId == userId).Select(c => c.Id).FirstOrDefaultAsync();
         }
 
-        public async Task<Product[]> GetCartProducts(Guid userId, Guid cartId)
+        public async Task<DomainModels.Product[]> GetCartProducts(Guid userId, Guid cartId)
         {
             var cartProducts = await _context.Carts.Where(c => c.Id == cartId && c.UserId == userId).Select(c => c.CartProducts.Select(cp => cp.Product)).FirstOrDefaultAsync();
-            return cartProducts.ToArray();
+            return _mapper.Map<Product[], DomainModels.Product[]>(cartProducts.ToArray());
         }
     }
 }

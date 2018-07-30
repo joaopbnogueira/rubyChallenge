@@ -42,7 +42,7 @@ namespace Cabify.DataRepository.Migrations
                 {
                     b.Property<Guid>("CartId");
 
-                    b.Property<Guid>("ProductId");
+                    b.Property<string>("ProductId");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
@@ -57,8 +57,11 @@ namespace Cabify.DataRepository.Migrations
 
             modelBuilder.Entity("Cabify.DataRepository.Model.Product", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.Property<decimal>("Price");
 

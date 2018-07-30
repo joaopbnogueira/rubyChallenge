@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Cabify.DataRepository.Model.Configuration
+namespace Cabify.DataRepository.Entities.Configuration
 {
     public class CartConfiguration : IEntityTypeConfiguration<Cart>
     {

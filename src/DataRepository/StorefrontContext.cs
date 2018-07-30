@@ -1,5 +1,5 @@
-﻿using Cabify.DataRepository.Model;
-using Cabify.DataRepository.Model.Configuration;
+﻿using Cabify.DataRepository.Entities.Configuration;
+using Cabify.DataRepository.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cabify.DataRepository

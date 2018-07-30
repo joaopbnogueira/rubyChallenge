@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Cabify.DataRepository;
 using Cabify.Storefront.Configuration;
+using Cabify.Storefront.Mappers;
 using Cabify.Storefront.Services;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
@@ -43,7 +44,10 @@ namespace Cabify.Storefront
             services.UseDataRepository(Configuration.GetConnectionString("DefaultConnection"));
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserContext, UserContext>();
+            services.AddSingleton<CartMapper>();
+            services.AddSingleton<IPromoEngine, PromoEngine>();
             
+
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             
@@ -129,10 +133,7 @@ namespace Cabify.Storefront
                     .RequireAuthenticatedUser()
                     .Build();
 
-                options.Filters.Add(new AuthorizeFilter(policy));
-                //options.Filters.Add(typeof(DbContextTransactionPageFilter));
-                //options.Filters.Add(typeof(ValidatorPageFilter));
-                //options.ModelBinderProviders.Insert(0, new EntityModelBinderProvider());
+                options.Filters.Add(new AuthorizeFilter(policy));                
 
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
             .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Startup>(); });            
