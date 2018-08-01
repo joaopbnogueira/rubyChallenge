@@ -1,1 +1,3 @@
 wwwroot/lib/
+node_modules/
+wwwroot/dist/

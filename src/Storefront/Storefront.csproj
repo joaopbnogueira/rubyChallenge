@@ -5,6 +5,7 @@
     <UserSecretsId>f4d0e41b-ad39-4af8-acf4-83e9de3e1ab8</UserSecretsId>
     <AssemblyName>Cabify.Storefront</AssemblyName>
     <RootNamespace>Cabify.Storefront</RootNamespace>
+    <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +16,7 @@
     <PackageReference Include="FluentValidation.AspNetCore" Version="7.6.104" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.1.1" />    
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.1.1" />
     <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.133" />
     <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.0.133" />
@@ -28,7 +29,7 @@
     <PackageReference Include="Serilog.Exceptions" Version="4.1.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="2.6.1" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
+    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />    
   </ItemGroup>
 
   <ItemGroup>
@@ -39,5 +40,5 @@
   <ItemGroup>
     <ProjectReference Include="..\DataRepository\DataRepository.csproj" />
   </ItemGroup>
-
+  
 </Project>
