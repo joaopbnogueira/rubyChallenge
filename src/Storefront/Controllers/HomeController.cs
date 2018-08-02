@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Cabify.Storefront.Models;
+using Cabify.Storefront.Models.Responses;
 using Cabify.Storefront.Services;
 using Microsoft.AspNetCore.Mvc;
 

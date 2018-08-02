@@ -1,4 +1,5 @@
-﻿using Cabify.DataRepository.Entities.Configuration;
+﻿using System.Linq;
+using Cabify.DataRepository.Entities.Configuration;
 using Cabify.DataRepository.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +22,12 @@ namespace Cabify.DataRepository
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new CartConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());            
-            modelBuilder.ApplyConfiguration(new CartProductConfiguration());            
+            modelBuilder.ApplyConfiguration(new CartProductConfiguration());
+
+            foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(t => t.GetProperties()).Where(p => p.ClrType == typeof(decimal)))
+            {
+                property.Relational().ColumnType = "decimal(18, 6)";
+            }
         }
     }
 }

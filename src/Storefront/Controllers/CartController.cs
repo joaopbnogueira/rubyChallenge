@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Cabify.DataRepository;
 using Cabify.Storefront.Mappers;
-using Cabify.Storefront.Models;
 using Cabify.Storefront.Models.Requests;
+using Cabify.Storefront.Models.Responses;
 using Cabify.Storefront.Services;
 using Microsoft.AspNetCore.Mvc;
 

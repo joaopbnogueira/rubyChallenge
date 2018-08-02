@@ -45,9 +45,8 @@ namespace Cabify.Storefront
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserContext, UserContext>();
             services.AddSingleton<CartMapper>();
+            services.AddSingleton<ProductsMapper>();
             services.AddSingleton<IPromoEngine, PromoEngine>();
-            
-
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             

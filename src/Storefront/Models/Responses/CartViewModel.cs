@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Cabify.Storefront.Models.Responses;
 
-namespace Cabify.Storefront.Models
+namespace Cabify.Storefront.Models.Responses
 {
     public class CartViewModel
     {
@@ -10,4 +9,5 @@ namespace Cabify.Storefront.Models
         public IReadOnlyCollection<CartItemViewModel> Items { get; set; }
         public string Total { get; set; }           
     }
+
 }

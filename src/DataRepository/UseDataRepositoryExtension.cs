@@ -46,6 +46,7 @@ namespace Cabify.DataRepository
                             Price = 7.50m
                         }
                     );
+                    context.SaveChanges();
                 }
             }
         }

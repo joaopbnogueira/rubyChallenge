@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using Cabify.DomainModels;
-using Cabify.Storefront.Models;
 using Cabify.Storefront.Models.Responses;
 using Cabify.Storefront.Services;
 
 namespace Cabify.Storefront.Mappers
 {
-    public class CartMapper
-    {
-        private static readonly CultureInfo Portugal = new CultureInfo("pt-PT");
-
+    public class CartMapper : MapperBase
+    {    
         private readonly IPromoEngine _promoEngine;
 
         public CartMapper(IPromoEngine promoEngine)
@@ -26,17 +22,16 @@ namespace Cabify.Storefront.Mappers
             var itemViewModels = products.Select(p => new CartItemViewModel
             {
                 Code = p.Id,
-                Name = p.Name,
-                // Prices assume PT location/format/currency for simplicity
-                Price = p.Price.ToString("C", Portugal),
-                PromoPrice = p.PromoPrice?.ToString("C", Portugal)
+                Name = p.Name,                
+                Price = ToPriceString(p.Price),
+                PromoPrice = ToPriceString(p.PromoPrice)
             }).ToList();
             
             return new CartViewModel
             {
                 CartId = cartId,
                 Items = itemViewModels,
-                Total = itemsWithPromos.Sum(p => p.PromoPrice ?? p.Price).ToString("C", Portugal)
+                Total = ToPriceString(itemsWithPromos.Sum(p => p.PromoPrice ?? p.Price))
             };
         }
     }

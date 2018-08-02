@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cabify.DataRepository.Migrations
 {
     [DbContext(typeof(StorefrontContext))]
-    [Migration("20180730232355_InitialCreate")]
+    [Migration("20180802190335_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace Cabify.DataRepository.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Cabify.DataRepository.Model.Cart", b =>
+            modelBuilder.Entity("Cabify.DataRepository.Entities.Cart", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -40,7 +40,7 @@ namespace Cabify.DataRepository.Migrations
                     b.ToTable("Carts");
                 });
 
-            modelBuilder.Entity("Cabify.DataRepository.Model.CartProduct", b =>
+            modelBuilder.Entity("Cabify.DataRepository.Entities.CartProduct", b =>
                 {
                     b.Property<Guid>("CartId");
 
@@ -57,7 +57,7 @@ namespace Cabify.DataRepository.Migrations
                     b.ToTable("CartProduct");
                 });
 
-            modelBuilder.Entity("Cabify.DataRepository.Model.Product", b =>
+            modelBuilder.Entity("Cabify.DataRepository.Entities.Product", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -65,7 +65,8 @@ namespace Cabify.DataRepository.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<decimal>("Price");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18, 6)");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
@@ -76,7 +77,7 @@ namespace Cabify.DataRepository.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Cabify.DataRepository.Model.User", b =>
+            modelBuilder.Entity("Cabify.DataRepository.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -93,22 +94,22 @@ namespace Cabify.DataRepository.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Cabify.DataRepository.Model.Cart", b =>
+            modelBuilder.Entity("Cabify.DataRepository.Entities.Cart", b =>
                 {
-                    b.HasOne("Cabify.DataRepository.Model.User", "User")
+                    b.HasOne("Cabify.DataRepository.Entities.User", "User")
                         .WithOne("Cart")
-                        .HasForeignKey("Cabify.DataRepository.Model.Cart", "UserId")
+                        .HasForeignKey("Cabify.DataRepository.Entities.Cart", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Cabify.DataRepository.Model.CartProduct", b =>
+            modelBuilder.Entity("Cabify.DataRepository.Entities.CartProduct", b =>
                 {
-                    b.HasOne("Cabify.DataRepository.Model.Cart", "Cart")
+                    b.HasOne("Cabify.DataRepository.Entities.Cart", "Cart")
                         .WithMany("CartProducts")
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Cabify.DataRepository.Model.Product", "Product")
+                    b.HasOne("Cabify.DataRepository.Entities.Product", "Product")
                         .WithMany("CartProducts")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade);

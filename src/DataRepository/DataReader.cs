@@ -33,5 +33,11 @@ namespace Cabify.DataRepository
             var cartProducts = await _context.Carts.Where(c => c.Id == cartId && c.UserId == userId).Select(c => c.CartProducts.Select(cp => cp.Product)).FirstOrDefaultAsync();
             return _mapper.Map<Product[], DomainModels.Product[]>(cartProducts.ToArray());
         }
+
+        public async Task<DomainModels.Product[]> GetAllProducts()
+        {
+            var products = await _context.Products.ToArrayAsync();
+            return _mapper.Map<Product[], DomainModels.Product[]>(products);
+        }
     }
 }

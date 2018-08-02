@@ -1,4 +1,4 @@
-﻿namespace Cabify.Storefront.Models
+﻿namespace Cabify.Storefront.Models.Responses
 {
     public class HomeIndexViewModel
     {
