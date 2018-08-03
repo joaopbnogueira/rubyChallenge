@@ -29,7 +29,7 @@ namespace Cabify.Storefront.Mappers
             
             return new CartViewModel
             {
-                CartId = cartId,
+                Id = cartId,
                 Items = itemViewModels,
                 Total = ToPriceString(itemsWithPromos.Sum(p => p.PromoPrice ?? p.Price))
             };
