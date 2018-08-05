@@ -3,11 +3,10 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as ReactLoader from "react-loader";
 import { Grid, Row, Col, Jumbotron } from "react-bootstrap";
-import { IAppState } from "./Interfaces";
 import Product from "./Product";
 import Cart from "./Cart";
 import axios from 'axios';
-
+import { IAppState, IProductsResponse, ICartResponse, IProductProps, IPutProductInCartRequest } from "./Interfaces";
 
 class App extends React.Component<any, IAppState> {
     constructor(props: any) {
@@ -21,28 +20,73 @@ class App extends React.Component<any, IAppState> {
     }
 
     public getProducts = () => {
-        axios.get('/api/products')
+        axios.get<IProductsResponse>('/api/products')
             .then(response => {
                 this.setState({
-                    products: response.data.items,
+                    products: response.data.items.map(productData => {
+                        var product: IProductProps = {
+                            data: productData,
+                            addToCart: this.addToCart
+                        };
+                        return product;
+                    }),                    
                     productsLoaded: true
                 });
-            });
+            }).catch((e) => console.log(e));
     }
 
-    public getCart = () => {
-        axios.get('/api/cart')
+    public refreshCart = () => {
+        this.setState({
+            cartLoaded: false,
+        });
+
+        axios.get<ICartResponse>('/api/cart')
             .then(response => {
                 this.setState({
-                    cart: response.data,
-                    cartLoaded: true
+                    cartLoaded: true,
+                    cart: {
+                        emptyCart: this.emptyCart,
+                        data: response.data
+                    }
                 });
-            });
+            }).catch((e) => console.log(e));
     }
+    
+    public addToCart = (productId: string, quantity: number): boolean => {
+        
+        var request: IPutProductInCartRequest = {
+            productId: productId,
+            quantity: quantity
+        }
+
+        axios.put('/api/cart/'+this.state.cart.data.id, request)
+            .then(() => this.refreshCart())
+            .catch((e) => {
+                console.log(e);
+                return false;
+            });
+
+        return true;
+    }
+
+    public emptyCart = () => {
+        console.log("emptyCart");
+        axios.get('/api/cart')
+            .then(_ => {
+                this.setState({
+                    cartLoaded: true,
+                    cart: {
+                        emptyCart: this.emptyCart,
+                        data: null
+                    }
+                });
+            }).catch((e) => console.log(e));
+    }
+    
 
     componentDidMount() {
         this.getProducts();
-        this.getCart();
+        this.refreshCart();
     }
 
     public render() {
@@ -58,7 +102,7 @@ class App extends React.Component<any, IAppState> {
                 <Row>
                     <Col xs={12} md={8}>
                         <ReactLoader loaded={this.state.productsLoaded}>
-                            {this.state && this.state.products && this.state.products.map(p => { return (<Product key={p.id} {...p} />) })}
+                            {this.state && this.state.products && this.state.products.map(p => { return (<Product key={p.data.id} {...p} />) })}
                         </ReactLoader>
                     </Col>
                     <Col xs={6} md={4}>

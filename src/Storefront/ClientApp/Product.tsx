@@ -1,10 +1,10 @@
 ﻿import * as React from "react";
 import { Col, Button, Thumbnail, FormControl, FormGroup, Form, InputGroup } from "react-bootstrap";
-import { IProduct, IProductState } from "./Interfaces";
+import { IProductProps, IProductState } from "./Interfaces";
 
-class Product extends React.Component<IProduct, IProductState> {
+class Product extends React.Component<IProductProps, IProductState> {
 
-    constructor(props: IProduct) {
+    constructor(props: IProductProps) {
         super(props);
         this.state = {
             quantity: 1
@@ -20,15 +20,15 @@ class Product extends React.Component<IProduct, IProductState> {
     }
 
     public addToCart = () => {
-        console.log('added');
+        this.props.addToCart(this.props.data.id, this.state.quantity);
     }
 
     render() {
         return (
             <Col xs={4} md={4}>
-                <Thumbnail src={"/images/"+this.props.id+".jpg"}>
-                    <h5>{this.props.name}</h5>
-                    <p>{this.props.price}</p>
+                <Thumbnail src={"/images/" + this.props.data.id+".jpg"}>
+                    <h5>{this.props.data.name}</h5>
+                    <p>{this.props.data.price}</p>
                     <FormGroup>
                         <InputGroup>
                             <FormControl type="number" min="1" max="100" value={this.state.quantity} placeholder="Enter text" onChange={this.updateQuantity} />
