@@ -7,11 +7,11 @@ namespace Cabify.DataRepository.Entities.Configuration
     {
         public void Configure(EntityTypeBuilder<CartProduct> builder)
         {
-            builder.HasKey(p => new { p.CartId, p.ProductId });
+            builder.HasKey(p => new { p.UserId, p.ProductId });
 
-            builder.HasOne(p => p.Cart)
+            builder.HasOne(p => p.User)
                 .WithMany(p => p.CartProducts)
-                .HasForeignKey(p => p.CartId);
+                .HasForeignKey(p => p.UserId);
 
             builder.HasOne(p => p.Product)
                 .WithMany(p => p.CartProducts)

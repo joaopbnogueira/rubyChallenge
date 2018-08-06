@@ -59,7 +59,7 @@ class App extends React.Component<any, IAppState> {
             quantity: quantity
         }
 
-        axios.put('/api/cart/'+this.state.cart.data.id, request)
+        axios.put('/api/cart', request)
             .then(() => this.refreshCart())
             .catch((e) => {
                 console.log(e);

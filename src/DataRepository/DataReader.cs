@@ -22,15 +22,10 @@ namespace Cabify.DataRepository
         {
             return await _context.Users.Where(u => u.Email == email).Select(u => u.Id).FirstOrDefaultAsync();
         }
-        
-        public async Task<Guid> GetUserCartId(Guid userId)
+     
+        public async Task<DomainModels.Product[]> GetCartProducts(Guid userId)
         {
-            return await _context.Carts.AsNoTracking().Where(c => c.UserId == userId).Select(c => c.Id).FirstOrDefaultAsync();
-        }
-
-        public async Task<DomainModels.Product[]> GetCartProducts(Guid userId, Guid cartId)
-        {
-            var cartProducts = await _context.Carts.Where(c => c.Id == cartId && c.UserId == userId).Select(c => c.CartProducts.Select(cp => cp.Product)).FirstOrDefaultAsync();
+            var cartProducts = await _context.Users.Where(u => u.Id == userId).Select(c => c.CartProducts.Select(cp => cp.Product)).FirstOrDefaultAsync();
             return _mapper.Map<Product[], DomainModels.Product[]>(cartProducts.ToArray());
         }
 

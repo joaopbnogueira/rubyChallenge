@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Cabify.DomainModels;
 
 namespace Cabify.Storefront.Services
 {
     public class PromoEngine: IPromoEngine
     {
+        private readonly IMapper _mapper;
+
         // This business logic could be imported from some somewhere else (e.g. rules by configuration)
         static readonly Dictionary<string, Action<IEnumerable<Product>>> PromoStore = new Dictionary<string, Action<IEnumerable<Product>>>(StringComparer.OrdinalIgnoreCase)
         {
@@ -14,13 +17,26 @@ namespace Cabify.Storefront.Services
             {"TSHIRT", ApplyTshirtPromo}
         };
 
+
+        public PromoEngine(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         public IReadOnlyCollection<Product> ApplyPromos(IReadOnlyCollection<Product> products)
         {
+            var expandedProducts = products.SelectMany(p => Enumerable.Range(0, p.Quantity).Select(i => {
+                    var clone = _mapper.Map<Product, Product>(p);
+                    clone.Quantity = 1;
+                    return clone;                    
+                })).ToArray();
+
             foreach (var code in PromoStore.Keys)
             {
-                PromoStore[code].Invoke(products.Where(p => p.Id == code));
+                PromoStore[code].Invoke(expandedProducts.Where(p => p.Id == code));
             }
-            return products;
+
+            return expandedProducts;
         }
 
 

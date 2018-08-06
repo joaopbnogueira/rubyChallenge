@@ -30,24 +30,29 @@ namespace Cabify.Storefront.Controllers
         [HttpGet]
         public async Task<ActionResult<CartViewModel>> Get()
         {
-            var userId = await _userContext.GetUserId();
+            var userId = await _userContext.GetUserId();       
 
-            var cartId = await _dataReader.GetUserCartId(userId);
-            if (cartId == Guid.Empty)
-            {
-                cartId = await _dataWriter.AddCart(userId);
-            }
+            var products = await _dataReader.GetCartProducts(userId);
 
-            var products = await _dataReader.GetCartProducts(userId, cartId);
-
-            return _mapper.Map(cartId, products);
+            return _mapper.Map(products);
         }
 
-        [Route("{cartId}")]
+        [Route("")]
         [HttpPut]
-        public IActionResult PutProduct(Guid cartId, [FromBody] PutProductInCart request)
+        public async Task<IActionResult> PutProduct([FromBody] PutProductInCart request)
         {
+            var userId = await _userContext.GetUserId();
+            await _dataWriter.AddProduct(userId, request.ProductId, request.Quantity);
             return Ok();
-        }      
+        }
+
+        [Route("")]
+        [HttpDelete]
+        public async Task<IActionResult> EmptyCart()
+        {
+            var userId = await _userContext.GetUserId();
+            await _dataWriter.EmptyCart(userId);
+            return Ok();
+        }
     }
 }

@@ -19,40 +19,23 @@ namespace Cabify.DataRepository.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Cabify.DataRepository.Entities.Cart", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<Guid>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Carts");
-                });
-
             modelBuilder.Entity("Cabify.DataRepository.Entities.CartProduct", b =>
                 {
-                    b.Property<Guid>("CartId");
+                    b.Property<Guid>("UserId");
 
                     b.Property<string>("ProductId");
 
+                    b.Property<int>("Quantity");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.HasKey("CartId", "ProductId");
+                    b.HasKey("UserId", "ProductId");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartProduct");
+                    b.ToTable("CartProducts");
                 });
 
             modelBuilder.Entity("Cabify.DataRepository.Entities.Product", b =>
@@ -92,24 +75,16 @@ namespace Cabify.DataRepository.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Cabify.DataRepository.Entities.Cart", b =>
-                {
-                    b.HasOne("Cabify.DataRepository.Entities.User", "User")
-                        .WithOne("Cart")
-                        .HasForeignKey("Cabify.DataRepository.Entities.Cart", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("Cabify.DataRepository.Entities.CartProduct", b =>
                 {
-                    b.HasOne("Cabify.DataRepository.Entities.Cart", "Cart")
-                        .WithMany("CartProducts")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Cabify.DataRepository.Entities.Product", "Product")
                         .WithMany("CartProducts")
                         .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Cabify.DataRepository.Entities.User", "User")
+                        .WithMany("CartProducts")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

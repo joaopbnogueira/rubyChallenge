@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Cabify.Storefront.Models;
 using Cabify.Storefront.Models.Responses;
 using Cabify.Storefront.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -23,26 +22,7 @@ namespace Cabify.Storefront.Controllers
             };
 
             return View(viewModel);
-        }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        }     
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

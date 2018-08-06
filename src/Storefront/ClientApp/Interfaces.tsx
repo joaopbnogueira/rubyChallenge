@@ -7,8 +7,7 @@ export interface IProductsResponse {
     items?: IProductData[];
 }
 
-export interface ICartResponse {
-    id: string;
+export interface ICartResponse {    
     total: string;
     items?: IProductData[];
 }

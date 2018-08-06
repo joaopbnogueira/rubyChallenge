@@ -7,9 +7,7 @@ namespace Cabify.DataRepository
     {
         public MapperProfile()
         {
-            CreateMap<Entities.Product, Product>(MemberList.Destination);
-
-            CreateMap<Entities.Cart, Cart>(MemberList.Destination);
+            CreateMap<Entities.Product, Product>(MemberList.Destination);            
         }
     }
 }

@@ -6,4 +6,8 @@
     <RootNamespace>Cabify.DomainModels</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+  </ItemGroup>
+
 </Project>

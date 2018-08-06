@@ -7,10 +7,10 @@ namespace Cabify.DataRepository
 {
     public class StorefrontContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
-        public DbSet<Cart> Carts { get; set; }
+        public DbSet<User> Users { get; set; }        
         public DbSet<Product> Products { get; set; }
-        
+        public DbSet<CartProduct> CartProducts { get; set; }
+
         public StorefrontContext(DbContextOptions<StorefrontContext> options) : base(options)
         {
         }
@@ -19,8 +19,7 @@ namespace Cabify.DataRepository
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder.ApplyConfiguration(new CartConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());            
             modelBuilder.ApplyConfiguration(new ProductConfiguration());            
             modelBuilder.ApplyConfiguration(new CartProductConfiguration());
 
