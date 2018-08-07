@@ -16,8 +16,11 @@
     <PackageReference Include="FluentValidation.AspNetCore" Version="7.6.104" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.1.1" />    
-    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.AzureAppServicesIntegration" Version="2.1.1" />    
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.1.1" />    
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="2.1.1" />
     <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.133" />
     <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.0.133" />
     <PackageReference Include="Robotify.AspNetCore" Version="0.2.3" />

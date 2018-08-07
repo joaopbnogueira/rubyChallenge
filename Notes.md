@@ -30,7 +30,6 @@ Things left out:
 Things done:
  - Asp .Net Core / MVC / WebApi
  - Auth with OpenIDConnect supporting Google and Facebook SSO - (using Auth0's free services)
- -- Note: OID client_secret is in the settings because this is a sandboxed environment, and is included solely for the convenience of app reviewers
  - Flexible logging with Serilog
  - Automapper to easily map between domain boarders without having to manually map DTOs
  - Fluentvalidation to validate API requests
