@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Cabify.DataRepository;
-using Cabify.Storefront.Models.Requests;
 using Cabify.Storefront.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Cabify.Storefront.Mappers;
@@ -28,12 +26,5 @@ namespace Cabify.Storefront.Controllers
             var products = await _dataReader.GetAllProducts();
             return _mapper.Map(products);
         }
-
-        [Route("{cartId}")]
-        [HttpPut]
-        public IActionResult PutProduct(Guid cartId, [FromBody] PutProductInCart request)
-        {
-            return Ok();
-        }      
     }
 }

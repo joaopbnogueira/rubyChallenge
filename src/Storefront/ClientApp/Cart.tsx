@@ -1,5 +1,5 @@
 ﻿import * as React from "react";
-import {  Row, Col, Button, Panel, ListGroup, ListGroupItem } from "react-bootstrap";
+import { Row, Col, Button, Panel, ListGroup, ListGroupItem } from "react-bootstrap";
 import { ICartProps } from "./Interfaces";
 
 class Cart extends React.Component<ICartProps, {}> {
@@ -9,7 +9,7 @@ class Cart extends React.Component<ICartProps, {}> {
     }
 
     public emptyCart = () => {
-        this.props.emptyCart();        
+        this.props.emptyCart();
     }
 
     public renderEmptyCart = () => {
@@ -26,9 +26,14 @@ class Cart extends React.Component<ICartProps, {}> {
         return (
             <div>
                 <ListGroup>
-                    {this.props && this.props.data.items && this.props.data.items.map(p => {
-                        return (<ListGroupItem key={p.id}>
-                            {p.name}
+                    {this.props && this.props.data.items && this.props.data.items.map((p,i) => {
+                        return (<ListGroupItem key={p.id + "-" + i}>
+                            <span>{p.name}</span>
+                            <div className="pull-right">
+                                {p.promoPrice
+                                    ? (<p ><span>{p.promoPrice}</span>{' '}<span style={{ textDecorationLine: 'line-through', textDecorationStyle: 'solid', fontSize:14, opacity:0.6 }}>{p.price}</span></p>)
+                                    : (<span>{p.price}</span>)}
+                            </div>                                                        
                         </ListGroupItem>);
                     })}
                 </ListGroup>
@@ -48,14 +53,14 @@ class Cart extends React.Component<ICartProps, {}> {
 
     render() {
 
-        let emptyCart = (this.props && this.props.data.items && this.props.data.items.length) === 0;        
+        let cartWithProducts = (this.props.data && this.props.data.items && this.props.data.items.length) > 0;
 
         return (
             <Panel bsStyle="primary">
                 <Panel.Heading >
                     <Panel.Title componentClass="h3">Shopping Cart</Panel.Title>
                 </Panel.Heading>
-                {emptyCart ? this.renderEmptyCart() : this.renderCartWithProducts()}
+                {cartWithProducts ? this.renderCartWithProducts() : this.renderEmptyCart()}
             </Panel>
         );
     }

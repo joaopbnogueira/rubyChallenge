@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cabify.DataRepository.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,28 @@ namespace Cabify.DataRepository
 {
     public static class UseDataRepositoryExtension
     {
+        internal static readonly IReadOnlyCollection<Product> BaseProducts = new[]
+        {
+            new Product
+            {
+                Id = "VOUCHER",
+                Name = "Cabify Voucher",
+                Price = 5.00m
+            },
+            new Product
+            {
+                Id = "TSHIRT",
+                Name = "Cabify T-Shirt",
+                Price = 20.00m
+            },
+            new Product
+            {
+                Id = "MUG",
+                Name = "Cabify Coffee Mug ",
+                Price = 7.50m
+            }
+        };
+
         public static IServiceCollection UseDataRepository(this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<StorefrontContext>(options => options.UseSqlServer(connectionString));
@@ -26,26 +49,7 @@ namespace Cabify.DataRepository
                 // NOTE: to simplify, we assume that products' prices are all in € and names in english
                 if (!context.Products.Any())
                 {
-                    context.Products.AddRange(
-                        new Product
-                        {
-                            Id = "VOUCHER",
-                            Name = "Cabify Voucher",
-                            Price = 5.00m
-                        },
-                        new Product
-                        {
-                            Id = "TSHIRT",
-                            Name = "Cabify T-Shirt",
-                            Price = 20.00m
-                        },
-                        new Product
-                        {
-                            Id = "MUG",
-                            Name = "Cabify Coffee Mug ",
-                            Price = 7.50m
-                        }
-                    );
+                    context.Products.AddRange(BaseProducts);
                     context.SaveChanges();
                 }
             }

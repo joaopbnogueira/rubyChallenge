@@ -1,63 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using Cabify.DomainModels;
 
 namespace Cabify.Storefront.Services
 {
     public class PromoEngine: IPromoEngine
-    {
-        private readonly IMapper _mapper;
-
+    {        
         // This business logic could be imported from some somewhere else (e.g. rules by configuration)
-        static readonly Dictionary<string, Action<IEnumerable<Product>>> PromoStore = new Dictionary<string, Action<IEnumerable<Product>>>(StringComparer.OrdinalIgnoreCase)
+        static readonly Dictionary<string, Action<IReadOnlyCollection<Product>>> PromoStore = new Dictionary<string, Action<IReadOnlyCollection<Product>>>(StringComparer.OrdinalIgnoreCase)
         {
             {"VOUCHER", ApplyVoucherPromo},
             {"TSHIRT", ApplyTshirtPromo}
         };
 
-
-        public PromoEngine(IMapper mapper)
-        {
-            _mapper = mapper;
-        }
-
         public IReadOnlyCollection<Product> ApplyPromos(IReadOnlyCollection<Product> products)
-        {
-            var expandedProducts = products.SelectMany(p => Enumerable.Range(0, p.Quantity).Select(i => {
-                    var clone = _mapper.Map<Product, Product>(p);
-                    clone.Quantity = 1;
-                    return clone;                    
-                })).ToArray();
-
+        {           
             foreach (var code in PromoStore.Keys)
             {
-                PromoStore[code].Invoke(expandedProducts.Where(p => p.Id == code));
+                PromoStore[code].Invoke(products.Where(p => p.Id == code).ToArray());
             }
 
-            return expandedProducts;
+            return products;
         }
 
 
-        private static void ApplyVoucherPromo(IEnumerable<Product> products)
+        private static void ApplyVoucherPromo(IReadOnlyCollection<Product> products)
         {
-            var i = 0;
+            var i = 1;
             foreach (var product in products)
             {
                 if (i % 2 == 0)
                 {
-                    product.PromoPrice = 0.00m;
+                    product.PromoPrice = 0.00m;                    
                 }
+                i++;
             }            
         }
 
-        private static void ApplyTshirtPromo(IEnumerable<Product> products)
+        private static void ApplyTshirtPromo(IReadOnlyCollection<Product> products)
         {
-            var i = 0;
-            foreach (var product in products)
+            if (products.Count >= 3)
             {
-                if (i >= 3)
+                foreach (var product in products)
                 {
                     product.PromoPrice = 19.00m;
                 }

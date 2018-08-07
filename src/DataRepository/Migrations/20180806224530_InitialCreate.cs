@@ -38,20 +38,20 @@ namespace Cabify.DataRepository.Migrations
                 name: "CartProducts",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
-                    ProductId = table.Column<string>(nullable: false),
-                    Quantity = table.Column<int>(nullable: false),
+                    ProductId = table.Column<string>(nullable: true),
                     RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CartProducts", x => new { x.UserId, x.ProductId });
+                    table.PrimaryKey("PK_CartProducts", x => x.Id);
                     table.ForeignKey(
                         name: "FK_CartProducts_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CartProducts_Users_UserId",
                         column: x => x.UserId,
@@ -64,6 +64,11 @@ namespace Cabify.DataRepository.Migrations
                 name: "IX_CartProducts_ProductId",
                 table: "CartProducts",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartProducts_UserId",
+                table: "CartProducts",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

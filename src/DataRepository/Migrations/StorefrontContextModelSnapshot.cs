@@ -21,19 +21,22 @@ namespace Cabify.DataRepository.Migrations
 
             modelBuilder.Entity("Cabify.DataRepository.Entities.CartProduct", b =>
                 {
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("ProductId");
-
-                    b.Property<int>("Quantity");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.HasKey("UserId", "ProductId");
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("CartProducts");
                 });
@@ -79,8 +82,7 @@ namespace Cabify.DataRepository.Migrations
                 {
                     b.HasOne("Cabify.DataRepository.Entities.Product", "Product")
                         .WithMany("CartProducts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("Cabify.DataRepository.Entities.User", "User")
                         .WithMany("CartProducts")

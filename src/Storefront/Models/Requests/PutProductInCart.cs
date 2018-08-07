@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Cabify.Storefront.Models.Requests
+﻿namespace Cabify.Storefront.Models.Requests
 {
 
     public class PutProductInCart

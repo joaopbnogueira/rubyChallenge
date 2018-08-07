@@ -23,7 +23,7 @@ export interface IAppState {
     products?: IProductProps[];
     productsLoaded: boolean;
     cart: ICartProps;
-    cartLoaded: boolean;
+    cartLoaded: boolean;    
 }
 
 export interface IProductState {

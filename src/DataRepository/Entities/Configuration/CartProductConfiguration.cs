@@ -7,7 +7,7 @@ namespace Cabify.DataRepository.Entities.Configuration
     {
         public void Configure(EntityTypeBuilder<CartProduct> builder)
         {
-            builder.HasKey(p => new { p.UserId, p.ProductId });
+            builder.HasKey(p => p.Id);
 
             builder.HasOne(p => p.User)
                 .WithMany(p => p.CartProducts)

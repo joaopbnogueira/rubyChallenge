@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Cabify.DataRepository.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -26,25 +27,22 @@ namespace Cabify.DataRepository
             await _context.SaveChangesAsync();
 
             return user.Id;
-        }             
+        }
 
         public async Task AddProduct(Guid userId, string id, int quantity)
         {
-            var cartProduct = await _context.CartProducts.FirstOrDefaultAsync(cp => cp.UserId == userId && cp.ProductId == id);
-            if (cartProduct == null)
+            for (int i = 0; i < quantity; i++)
             {
-                cartProduct = new CartProduct {UserId = userId, ProductId = id};
-                _context.Add(cartProduct);
+                _context.Add(new CartProduct { UserId = userId, ProductId = id });
             }
 
-            cartProduct.Quantity += quantity;
             await _context.SaveChangesAsync();
         }
 
         public async Task EmptyCart(Guid userId)
         {
-            var cartProduct = new CartProduct {UserId = userId};
-            _context.Entry(cartProduct).State = EntityState.Deleted;
+            var cartProducts = await _context.Users.Where(u => u.Id == userId).Select(c => c.CartProducts).FirstOrDefaultAsync();
+            _context.CartProducts.RemoveRange(cartProducts);
             await _context.SaveChangesAsync();
         }
     }

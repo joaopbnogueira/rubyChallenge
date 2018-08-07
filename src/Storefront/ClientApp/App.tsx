@@ -35,11 +35,7 @@ class App extends React.Component<any, IAppState> {
             }).catch((e) => console.log(e));
     }
 
-    public refreshCart = () => {
-        this.setState({
-            cartLoaded: false,
-        });
-
+    public refreshCart = () => {        
         axios.get<ICartResponse>('/api/cart')
             .then(response => {
                 this.setState({
@@ -69,9 +65,8 @@ class App extends React.Component<any, IAppState> {
         return true;
     }
 
-    public emptyCart = () => {
-        console.log("emptyCart");
-        axios.get('/api/cart')
+    public emptyCart = () => {        
+        axios.delete('/api/cart')
             .then(_ => {
                 this.setState({
                     cartLoaded: true,
