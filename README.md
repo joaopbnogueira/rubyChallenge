@@ -1,7 +1,56 @@
+
 # Cabify Mobile Challenge
 
 ![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg) ![Windows build status](https://ci.appveyor.com/api/projects/status/0cphy1ydaplprp1o/branch/master?svg=true)
 
+## General Notes
+
+App available here: https://joaopbnogueira.azurewebsites.net/
+Source available here: https://github.com/joaopbnogueira/rubyChallenge
+
+Vanilla .Net Core MVC solution with 3 main components
+ - Frontend React App
+ - Backend exposed through authenticated API
+ - SQL Database
+ - Code published to [GitHub](https://github.com/joaopbnogueira/rubyChallenge) & integrated with AppVeyor for CI
+
+## Frontend Notes
+Things done:
+ - React + Typescript + Webpack
+ - Application logic works as specified
+
+Things left out:
+ - Debouncing (button) events - e.g. using reactive event streams /
+   redux-cycles and similar libraries
+ - Several UI/UX improvements. Examples include:
+	  1) follow cabify design-guidelines
+	  2) partial/overlay loaders
+ - Sass support
+ - Unit/functional testing - definitely a MUST have
+ - Code splitting
+ - Server side rendering
+ - Versioning
+ - Improved package.json scripts / webpack configuration
+- Translations + Localization (currency, format, etc)
+
+## Backend Notes
+Things done:
+ - Asp .Net Core / MVC / WebApi
+ - Auth with OpenIDConnect supporting Google and Facebook SSO - (using Auth0's free services)
+ -- Note: OID client_secret is in the settings because this is a sandboxed environment, and is included solely for the convenience of app reviewers
+ - Flexible logging with Serilog
+ - Automapper to easily map between domain boarders without having to manually map DTOs
+ - Fluentvalidation to validate API requests
+- EntityFramework
+- Application logic works as specified
+
+Things left out:
+- Translations + Localization (currency, format, etc)
+- Versioning
+- Additional Unit, Integration & Performance tests
+- Scalability concerns 
+
+## Original Challenge
 ##### Besides providing exceptional transportation services, Cabify also runs a physical store which sells (only) 3 products:
 
 ``` 
