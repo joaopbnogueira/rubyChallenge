@@ -6,6 +6,7 @@
 ## General Notes
 
 App available here: https://joaopbnogueira.azurewebsites.net/
+
 Source available here: https://github.com/joaopbnogueira/rubyChallenge
 
 Vanilla .Net Core MVC solution with 3 main components
