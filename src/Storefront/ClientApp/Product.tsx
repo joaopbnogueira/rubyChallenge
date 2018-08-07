@@ -25,7 +25,7 @@ class Product extends React.Component<IProductProps, IProductState> {
 
     render() {
         return (
-            <Col xs={4} md={4}>
+            <Col xs={12} sm={6} md={4}>
                 <Thumbnail src={"/images/" + this.props.data.id+".jpg"}>
                     <h5>{this.props.data.name}</h5>
                     <p>{this.props.data.price}</p>

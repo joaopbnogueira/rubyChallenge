@@ -100,7 +100,7 @@ class App extends React.Component<any, IAppState> {
                             {this.state && this.state.products && this.state.products.map(p => { return (<Product key={p.data.id} {...p} />) })}
                         </ReactLoader>
                     </Col>
-                    <Col xs={6} md={4}>
+                    <Col xs={12} md={4}>
                         <ReactLoader loaded={this.state.cartLoaded}>
                             {this.state && this.state.cart && <Cart {...this.state.cart} />}
                         </ReactLoader>
